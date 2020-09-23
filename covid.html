@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <title>Covid</title>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+
+    <style>
+        .header{
+            background-color: teal;
+            padding: 10px;
+            color: white; 
+        }
+        #tablebody{
+            color: black;
+        }
+        body{
+            background-image: linear-gradient(to top, #00e3ae 10%,#9be15d 100%);
+         background-repeat: no-repeat;     
+               }
+        footer{
+            background-color: rgb(4, 36, 36);
+            color: white;
+            margin-top: 30px;
+            padding: 10px;
+            font-weight: bold;
+        }
+        .container{
+            margin-top: 50px;
+        }
+
+    </style>
+</head>
+<body>
+    <section class="header">
+        <h1 class="text-center">Covid Stats</h1>
+    </section>
+    <section class="container">
+        <table id="covidtable" class="table table-bordered table-dark">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Country</th>
+                    <th>TotalCases</th>
+                    <th>Recovered</th>
+                    <th>Deaths</th>
+                </tr>
+            </thead>
+            <tbody id="tablebody">
+
+            </tbody>
+
+        </table>
+    </section>
+    <footer class="text-center">
+        <p>Designed and developed by</p>
+        <p>S.Rasikaa</p>
+    </footer>
+    
+</body>
+</html>
+<script>
+    var countries=[];
+    $.ajax({
+        url:"https://api.covid19api.com/summary",
+        type:'get',
+        dataType:"json",
+        success:function(response){
+            countries=response.Countries;
+            updatetable(countries);
+        },
+        error:function(error){
+            console.log(error);
+        },
+        always:{}
+
+    })
+    updatetable=(countries)=>{
+        for(country of countries){
+            var newrow="<tr><td>"+country.Country+"</td><td>"+country.TotalConfirmed+"</td><td>"+country.TotalRecovered+"</td><td>"+country.TotalDeaths+"</td></tr>"
+            $("#tablebody").append(newrow)
+        }
+         $("#covidtable").DataTable();
+
+
+    }
+</script>
